@@ -1,0 +1,39 @@
+<!-- Throttle is a technique that is ensure function will execute at most once in a specified time interval.
+No matter how many time event is triggered during that interval. -->
+
+<!-- Throttle limits the rate — only runs once every X ms even if called repeatedly. -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Throttling</title>
+  </head>
+  <body></body>
+  <script>
+    const throttle = (fn, limit) => {
+      let timeout, time;
+      return function (...args) {
+        if (!time) {
+          fn.apply(this, args);
+          time = Date.now();
+        } else {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => {
+            if (Date.now() - time >= limit) {
+              fn.apply(this, args);
+              time = Date.now();
+            }
+          }, limit - (Date.now() - time));
+        }
+      };
+    };
+    const handleth = () => {
+      console.log("hello");
+    };
+
+    const thfn = throttle(handleth, 2000);
+    window.addEventListener("mousemove", thfn, false);
+  </script>
+</html>

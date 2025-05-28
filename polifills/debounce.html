@@ -1,0 +1,34 @@
+<!-- Debounce is a method, in which if time difference between two strokes is less
+then the specified time // delay then previous timeout is cleared and function
+will postponed the execution. -->
+
+<!-- Debounce waits until the user stops triggering. -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Debouncing</title>
+  </head>
+  <body>
+    <input type="text" id="search" placeholder="Type to search..." />
+  </body>
+  <script>
+    const debounce = (fn, delay) => {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        let context = this;
+        timeout = setTimeout(() => fn.apply(context, args), delay);
+      };
+    };
+
+    function handleSearch(event) {
+      console.log("hello", event.target.value);
+    }
+
+    const debounceFn = debounce(handleSearch, 500);
+    document.getElementById("search").addEventListener("input", debounceFn);
+  </script>
+</html>
