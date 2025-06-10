@@ -33,7 +33,7 @@ No matter how many time event is triggered during that interval. -->
       console.log("hello");
     };
 
-    const thfn = throttle(handleth, 2000);
-    window.addEventListener("mousemove", thfn, false);
+    const throttling = throttle(handleth, 2000);
+    window.addEventListener("mousemove", throttling, false);
   </script>
 </html>
