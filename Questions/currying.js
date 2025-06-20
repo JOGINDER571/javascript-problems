@@ -10,9 +10,11 @@ function sum(...args) {
     storage = [...storage, ...args];
     return currying;
   }
+
   currying.valueOf = function () {
     return storage.reduce((a, b) => a + b, 0);
   };
+
   currying.value = currying.valueOf;
   return currying;
 }
