@@ -3,23 +3,13 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import { usePrevious } from "./hooks/usePrevious";
+import { useIdle } from "./hooks/useIdle";
 
-// const usePrevious = (value: any) => {
-//   // create a new reference
-//   const ref = useRef(null);
-
-//   // store current value in ref
-//   useEffect(() => {
-//     ref.current = value;
-//   }, [value]); // only re-run if value changes
-
-//   return ref.current;
-//   // return previous value (happens before update in useEffect above)
-// };
 
 function App() {
   const [count, setCount] = useState(0);
   const previous = usePrevious(count);
+  const idle = useIdle(2000);
   return (
     <>
       <div>
@@ -42,6 +32,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+        <h1>IsIdle: {idle ? "true" : "false"}</h1>
     </>
   );
 }
