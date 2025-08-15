@@ -1,0 +1,110 @@
+<!-- This question was asked in uber's frontend interview and Navi's frontend
+interview The problem statement is:
+- Implement a loading bar that animates from 0 to 100% in 3 seconds.
+- Start loading bar animation upon a button click.
+- Queue multiple loading bars if the button is clicked more than once.
+- Loading bar N starts animating with loading bar N-1 is done animating.
+
+We will implement it in vanilla JavaScript along with its two variations.
+Animated loading bars in batches.
+Start loading N bar after N-1 is half done (50%).
+As the problem statement can be conquered individually let’s start solving it. -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loader</title>
+  </head>
+  <body>
+    <div id="entry"></div>
+    <p><span>In queue:</span><span id="queueCount"></span></p>
+    <button id="btn">Add Animation</button>
+  </body>
+  <script>
+    let styleSheet;
+    const dynamicAnimation = (name, styles) => {
+      if (!styleSheet) {
+        styleSheet = document.createElement("style");
+        styleSheet.type = "text/css";
+        document.head.appendChild(styleSheet);
+      }
+      styleSheet.sheet.insertRule(`@keyframes ${name} {${styles}}`);
+    };
+    let count = 0;
+    const updateCount = (val) => {
+      count += val;
+      document.getElementById("queueCount").textContent = count;
+    };
+    const generateLoader = () => {
+      const fragment = document.createDocumentFragment();
+      const loader = document.createElement("div");
+      dynamicAnimation(
+        "loaderBar",
+        `
+            0% {
+            width: 0%;
+            }
+
+            100% {
+            width: 100%
+            }
+            `
+      );
+      loader.style.height = "10px";
+      loader.style.backgroundColor = "red";
+      loader.style.width = "0%";
+      loader.style.marginBottom = "5px";
+      loader.style.animation = "loaderBar 3s forwards";
+
+      //   loader.addEventListener("animationend", () => {
+      //     updateCount(-1);
+      //     if (count > 0) {
+      //       generateLoader();
+      //     }
+      //   });
+
+      // applying 50% logic
+
+      const shadowLoader = document.createElement("div");
+      dynamicAnimation(
+        "shadowloaderBar",
+        `
+            0% {
+            width: 0%;
+            }
+
+            100% {
+            width: 50%
+            }
+            `
+      );
+      shadowLoader.style.height = "5px";
+      shadowLoader.style.backgroundColor = "green";
+      shadowLoader.style.width = "0%";
+      shadowLoader.style.marginBottom = "5px";
+      shadowLoader.style.visibility = "hidden";
+      shadowLoader.style.animation = "shadowloaderBar 1.5s forwards";
+
+      const entry = document.getElementById("entry");
+      fragment.appendChild(loader);
+      fragment.appendChild(shadowLoader);
+      entry.appendChild(fragment);
+
+      shadowLoader.addEventListener("animationend", () => {
+        updateCount(-1);
+        if (count > 0) {
+          generateLoader();
+        }
+      });
+    };
+
+    document.getElementById("btn").addEventListener("click", () => {
+      if (count === 0) {
+        generateLoader();
+      }
+      updateCount(1);
+    });
+  </script>
+</html>
